@@ -2,12 +2,11 @@ package examples
 
 import (
 	"flag"
-	"os"
 	"path/filepath"
 
+	"github.com/b4fun/kubekit/kubehelper"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
 
@@ -19,18 +18,12 @@ func BindCLIFlags(fs *flag.FlagSet) *string {
 	return fs.String("kubeconfig", "", "absolute path to the kubeconfig file")
 }
 
-func OutOfClusterRestConfig(kubeconfig string) (*rest.Config, error) {
-	if kubeconfig == "" {
-		if v := os.Getenv("KUBECONFIG"); v != "" {
-			kubeconfig = v
-		}
-	}
-
-	return clientcmd.BuildConfigFromFlags("", kubeconfig)
+func GetClusterRestConfig(kubeconfig string) (*rest.Config, error) {
+	return kubehelper.LoadRestConfig("", kubeconfig)
 }
 
-func OutOfClusterKubeClient(kubeconfig string) (kubernetes.Interface, error) {
-	config, err := OutOfClusterRestConfig(kubeconfig)
+func GetKubeClient(kubeconfig string) (kubernetes.Interface, error) {
+	config, err := GetClusterRestConfig(kubeconfig)
 	if err != nil {
 		return nil, err
 	}

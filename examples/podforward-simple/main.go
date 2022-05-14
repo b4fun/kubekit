@@ -50,7 +50,7 @@ func mustParsePort(port string) uint16 {
 func main() {
 	setupFlags()
 
-	restConfig, err := examples.OutOfClusterRestConfig(*flagKubeConfig)
+	restConfig, err := examples.GetClusterRestConfig(*flagKubeConfig)
 	if err != nil {
 		panic(err.Error())
 	}

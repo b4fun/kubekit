@@ -43,7 +43,7 @@ func setupFlags() {
 func main() {
 	setupFlags()
 
-	kubeClient, err := examples.OutOfClusterKubeClient(*flagKubeConfig)
+	kubeClient, err := examples.GetKubeClient(*flagKubeConfig)
 	if err != nil {
 		panic(err.Error())
 	}
