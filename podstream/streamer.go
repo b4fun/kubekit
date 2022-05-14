@@ -18,7 +18,8 @@ import (
 )
 
 // Stream starts the pod stream.
-// It stops when the stop channel returned or any terminal error occurs.
+// It stops when the stop channel returned, or any terminal error occurs, or all pods logs
+// have been consumed in non-follow mode.
 //
 // The implemenetation is based on https://github.com/argoproj/argo-workflows/blob/8c77e89fc185ff640e1073692dfc7c043037440a/util/logs/workflow-logger.go .
 func Stream(
