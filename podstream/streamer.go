@@ -46,6 +46,7 @@ func Stream(
 	return streamer.start(stop)
 }
 
+// Streamer streams pods logs.
 type Streamer struct {
 	logger logger.Logger
 
