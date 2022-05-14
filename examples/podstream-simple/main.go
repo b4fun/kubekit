@@ -7,9 +7,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/b4fun/podkit"
-	"github.com/b4fun/podkit/examples"
-	"github.com/b4fun/podkit/podstream"
+	"github.com/b4fun/kubekit"
+	"github.com/b4fun/kubekit/examples"
+	"github.com/b4fun/kubekit/podstream"
 )
 
 var (
@@ -52,7 +52,7 @@ func main() {
 	defer cancel()
 
 	options := []podstream.Option{
-		podstream.WithLogger(podkit.LogFunc(func(format string, args ...interface{}) {
+		podstream.WithLogger(kubekit.LogFunc(func(format string, args ...interface{}) {
 			fmt.Printf(format+"\n", args...)
 		})),
 		podstream.ConsumeLogsWithFunc(func(x []podstream.LogEntry) {

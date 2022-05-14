@@ -1,7 +1,7 @@
-package podkit
+package kubekit
 
 import (
-	"github.com/b4fun/podkit/internal/logger"
+	"github.com/b4fun/kubekit/internal/logger"
 )
 
 type (

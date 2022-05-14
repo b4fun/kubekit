@@ -1,4 +1,4 @@
-module github.com/b4fun/podkit
+module github.com/b4fun/kubekit
 
 go 1.18
 

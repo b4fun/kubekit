@@ -3,11 +3,11 @@ package podstream
 import (
 	"regexp"
 
-	"github.com/b4fun/podkit"
+	"github.com/b4fun/kubekit"
 )
 
 // WithLogger sets the logger to be used by the streamer.
-func WithLogger(logger podkit.Logger) Option {
+func WithLogger(logger kubekit.Logger) Option {
 	return func(streamer *Streamer) error {
 		streamer.logger = logger
 		return nil

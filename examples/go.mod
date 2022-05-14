@@ -1,14 +1,14 @@
-module github.com/b4fun/podkit/examples
+module github.com/b4fun/kubekit/examples
 
 go 1.18
 
 require (
 	github.com/b4fun/battery/flag v0.1.0
-	github.com/b4fun/podkit v0.0.0-00010101000000-000000000000
+	github.com/b4fun/kubekit v0.0.0-00010101000000-000000000000
 	k8s.io/client-go v0.24.0
 )
 
-replace github.com/b4fun/podkit => ../
+replace github.com/b4fun/kubekit => ../
 
 require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect

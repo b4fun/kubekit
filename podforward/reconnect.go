@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/b4fun/podkit/internal/logger"
+	"github.com/b4fun/kubekit/internal/logger"
 	"k8s.io/client-go/rest"
 )
 

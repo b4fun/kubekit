@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/b4fun/podkit/internal/logger"
+	"github.com/b4fun/kubekit/internal/logger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"

@@ -1,3 +1,3 @@
-# podkit
+# kubekit
 
-Your kit for interacting with Kubernetes pod.
+Your kit for interacting with Kubernetes.

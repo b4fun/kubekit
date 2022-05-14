@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/b4fun/podkit"
-	"github.com/b4fun/podkit/internal/logger"
+	"github.com/b4fun/kubekit"
+	"github.com/b4fun/kubekit/internal/logger"
 	"github.com/stretchr/testify/assert"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -69,7 +69,7 @@ func TestStreamer_NoFollow(t *testing.T) {
 
 		testCtx := newStreamerTestCtx(
 			t,
-			WithLogger(podkit.LogFunc(func(msg string, args ...interface{}) {
+			WithLogger(kubekit.LogFunc(func(msg string, args ...interface{}) {
 				fmt.Printf(msg+"\n", args...)
 			})),
 		)
@@ -121,7 +121,7 @@ func TestStreamer_Follow(t *testing.T) {
 
 		testCtx := newStreamerTestCtx(
 			t,
-			WithLogger(podkit.LogFunc(func(msg string, args ...interface{}) {
+			WithLogger(kubekit.LogFunc(func(msg string, args ...interface{}) {
 				fmt.Printf(msg+"\n", args...)
 			})),
 		)

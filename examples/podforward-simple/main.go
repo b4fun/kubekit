@@ -10,9 +10,9 @@ import (
 	"time"
 
 	bflag "github.com/b4fun/battery/flag"
-	"github.com/b4fun/podkit"
-	"github.com/b4fun/podkit/examples"
-	"github.com/b4fun/podkit/podforward"
+	"github.com/b4fun/kubekit"
+	"github.com/b4fun/kubekit/examples"
+	"github.com/b4fun/kubekit/podforward"
 )
 
 var (
@@ -55,7 +55,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	logger := podkit.LogFunc(func(msg string, args ...interface{}) {
+	logger := kubekit.LogFunc(func(msg string, args ...interface{}) {
 		fmt.Printf(msg+"\n", args...)
 	})
 
