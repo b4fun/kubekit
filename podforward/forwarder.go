@@ -134,8 +134,22 @@ func (fw *Forwarder) start(forwardCtx context.Context) (ForwardHandle, error) {
 		return nil, err
 	}
 
+	stopOnce := &sync.Once{}
+	stop := func() {
+		stopOnce.Do(func() {
+			fw.logger.Log("stopping port forward")
+			close(stopChan)
+			close(errChan)
+		})
+	}
+
 	go func() {
-		errChan <- pf.ForwardPorts()
+		// we should stop the port forwarder when port forward is done
+		defer stop()
+		if err := pf.ForwardPorts(); err != nil {
+			fw.logger.Log("port forward failed: %s", err)
+			errChan <- err
+		}
 	}()
 
 	select {
@@ -154,12 +168,6 @@ func (fw *Forwarder) start(forwardCtx context.Context) (ForwardHandle, error) {
 			fw.logger.Log(err.Error())
 			return nil, err
 		}
-		stopOnce := &sync.Once{}
-		return newForwardHandle(ports, func() {
-			stopOnce.Do(func() {
-				fw.logger.Log("stopping port forward")
-				close(stopChan)
-			})
-		}), nil
+		return newForwardHandle(ports, stop, errChan), nil
 	}
 }

@@ -19,5 +19,10 @@ type ForwardHandle interface {
 	LocalPort(remortPort uint16) uint16
 
 	// StopForward stops the forwarder.
+	// It is safe to call this method multiple times.
 	StopForward()
+
+	// ErrChann returns the error channel of the forwarder.
+	// It will be closed when the forwarder is stopped.
+	ErrChan() <-chan error
 }

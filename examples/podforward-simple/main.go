@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"os"
 	"os/signal"
 	"strconv"
 	"strings"
+	"time"
 
 	bflag "github.com/b4fun/battery/flag"
 	"github.com/b4fun/podkit"
@@ -55,13 +55,12 @@ func main() {
 		panic(err.Error())
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	logger := podkit.LogFunc(func(msg string, args ...interface{}) {
+		fmt.Printf(msg+"\n", args...)
+	})
 
 	options := []podforward.Option{
-		podforward.WithLogger(podkit.LogFunc(func(format string, args ...interface{}) {
-			fmt.Printf(format+"\n", args...)
-		})),
+		podforward.WithLogger(logger),
 		podforward.FromSelectedPods(flagLabelSelector),
 	}
 	for _, portPair := range flagPorts {
@@ -85,7 +84,14 @@ func main() {
 		options = append(options, podforward.FromRemotePort(remotePort).ToLocalPort(localPort))
 	}
 
-	pf, err := podforward.Forward(ctx, restConfig, flagNamespace, options...)
+	pf, err := podforward.ForwardWithReconnect(
+		logger,
+		30*time.Second,
+		time.NewTicker(5*time.Second).C,
+		restConfig,
+		flagNamespace,
+		options...,
+	)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -93,5 +99,11 @@ func main() {
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, os.Interrupt)
-	<-sigs
+	select {
+	case <-sigs:
+	case err := <-pf.ErrChan():
+		if err != nil {
+			panic(err.Error())
+		}
+	}
 }
