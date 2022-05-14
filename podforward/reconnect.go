@@ -39,8 +39,9 @@ func ForwardWithReconnect(
 	reconnectCtx, cancelReconnect := context.WithCancel(context.Background())
 
 	rv := &replacebleForwardHandle{
-		stop:    cancelReconnect,
-		errChan: make(chan error),
+		stop:          cancelReconnect,
+		errChan:       make(chan error),
+		forwardHandle: currentHandle,
 	}
 
 	go func() {
