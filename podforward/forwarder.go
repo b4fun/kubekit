@@ -66,7 +66,10 @@ func Forward(
 	}
 
 	forwarder := &Forwarder{
-		logger: logger.NoOp,
+		logger:     logger.NoOp,
+		restConfig: restConfig,
+		client:     kubeClient,
+		namespace:  namespace,
 	}
 	for _, opt := range options {
 		if err := opt(forwarder); err != nil {
@@ -77,9 +80,6 @@ func Forward(
 		return nil, fmt.Errorf("no ports specified")
 	}
 
-	forwarder.restConfig = restConfig
-	forwarder.client = kubeClient
-	forwarder.namespace = namespace
 	if forwarder.logger == nil {
 		forwarder.logger = logger.NoOp
 	}

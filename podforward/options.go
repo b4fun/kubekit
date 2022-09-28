@@ -1,9 +1,14 @@
 package podforward
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/b4fun/kubekit"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 // WithLogger sets the logger to be used by the streamer.
@@ -18,6 +23,29 @@ func WithLogger(logger kubekit.Logger) Option {
 func FromSelectedPods(labelSelector string) Option {
 	return func(forwarder *Forwarder) error {
 		forwarder.labelSelector = labelSelector
+		return nil
+	}
+}
+
+// FromService sets the label selector by service name.
+// It expects the service exists before the forwarder is created.
+func FromService(serviceName string) Option {
+	return func(forwarder *Forwarder) error {
+		if forwarder.client == nil {
+			return errors.New("no kube client provided")
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+		defer cancel()
+
+		svc, err := forwarder.client.CoreV1().Services(forwarder.namespace).
+			Get(ctx, serviceName, metav1.GetOptions{})
+		if err != nil {
+			return fmt.Errorf("get service %q: %w", serviceName, err)
+		}
+
+		forwarder.labelSelector = labels.SelectorFromSet(svc.Spec.Selector).String()
+
 		return nil
 	}
 }
